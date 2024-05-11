@@ -66,6 +66,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
+    implementation(libs.coil)
+    implementation(libs.coil.video)
+    implementation(libs.paging)
+    implementation(libs.paging.compose)
     implementation ("androidx.navigation:navigation-compose:2.7.6")
+    implementation("com.github.a914-gowtham:compose-ratingbar:1.3.12")
+
 }
