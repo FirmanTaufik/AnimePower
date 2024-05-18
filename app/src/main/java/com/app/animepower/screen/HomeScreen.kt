@@ -1,9 +1,10 @@
 package com.app.animepower.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,10 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,23 +31,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.app.animepower.BottomNavigation
 import com.app.animepower.R
+import com.app.animepower.component.ItemTrending
 import com.app.animepower.component.MediaCarousel
 import com.app.animepower.model.HomeMediaUI
 import com.app.animepower.ui.theme.BackgroundBlue
+import com.app.animepower.ui.theme.SelectedNavColor
 import com.app.animepower.ui.theme.UnSelectedNavColor
 import com.app.animepower.ui.theme.WhiteColor300
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onClickToDetail: ()->Unit) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -105,18 +114,69 @@ fun HomeScreen() {
         }
         Spacer(modifier = Modifier.height(15.dp))
         // Card Slider
-        val list = listOf<HomeMediaUI>(
-            HomeMediaUI(0, "Venom 3", "https://m.media-amazon.com/images/M/MV5BMzU3YTc1ZjMtZTAyOC00ZTI1LWE0MzItMTllN2M2YWI4MWZmXkEyXkFqcGdeQXVyMDA4NzMyOA@@._V1_.jpg",
-            "backdrop", "overview"),
-            HomeMediaUI(0, "Venom 3", "https://m.media-amazon.com/images/M/MV5BMzU3YTc1ZjMtZTAyOC00ZTI1LWE0MzItMTllN2M2YWI4MWZmXkEyXkFqcGdeQXVyMDA4NzMyOA@@._V1_.jpg",
-                "backdrop", "overview"),
-            HomeMediaUI(0, "Venom 3", "https://m.media-amazon.com/images/M/MV5BMzU3YTc1ZjMtZTAyOC00ZTI1LWE0MzItMTllN2M2YWI4MWZmXkEyXkFqcGdeQXVyMDA4NzMyOA@@._V1_.jpg",
-                "backdrop", "overview"), )
+        val list = listOf(
+            HomeMediaUI(
+                0,
+                "Venom 3",
+                "https://m.media-amazon.com/images/M/MV5BMzU3YTc1ZjMtZTAyOC00ZTI1LWE0MzItMTllN2M2YWI4MWZmXkEyXkFqcGdeQXVyMDA4NzMyOA@@._V1_.jpg",
+                "backdrop",
+                "overview"
+            ),
+            HomeMediaUI(
+                0,
+                "Venom 3",
+                "https://m.media-amazon.com/images/M/MV5BMzU3YTc1ZjMtZTAyOC00ZTI1LWE0MzItMTllN2M2YWI4MWZmXkEyXkFqcGdeQXVyMDA4NzMyOA@@._V1_.jpg",
+                "backdrop",
+                "overview"
+            ),
+            HomeMediaUI(
+                0,
+                "Venom 3",
+                "https://m.media-amazon.com/images/M/MV5BMzU3YTc1ZjMtZTAyOC00ZTI1LWE0MzItMTllN2M2YWI4MWZmXkEyXkFqcGdeQXVyMDA4NzMyOA@@._V1_.jpg",
+                "backdrop",
+                "overview"
+            ),
+        )
         MediaCarousel(
             list = list,
-            carouselLabel =  "Movie",
+            carouselLabel = "Movie",
             onItemClicked = { }
         )
+
+        //TRENDING NOW CONTENT
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 15.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Trending Now",
+                fontWeight = FontWeight.Bold
+            )
+            Row(modifier = Modifier.wrapContentWidth()) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = SelectedNavColor
+                    )
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+            }
+        }
+
+        LazyRow(modifier = Modifier.fillMaxWidth()) {
+            items(8) {
+                ItemTrending(it) {
+                    onClickToDetail()
+                }
+            }
+        }
+
+
     }
 
 }
@@ -124,5 +184,20 @@ fun HomeScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun S() {
-    HomeScreen()
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = "Trending Now")
+        Row(modifier = Modifier.wrapContentWidth()) {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+        }
+    }
 }

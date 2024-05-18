@@ -3,6 +3,7 @@ package com.app.animepower
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,10 +31,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.app.animepower.model.ItemBottomNavigationModel
+import com.app.animepower.screen.DetailScreen
 import com.app.animepower.screen.DownloadScreen
 import com.app.animepower.screen.ExploreScreen
 import com.app.animepower.screen.HomeScreen
@@ -50,23 +54,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
+            var isNavigationShow by remember { mutableStateOf(true) }
             AnimePowerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val listNavRoute  = arrayListOf(RouteScreen.HomeScreen.route,
+                        RouteScreen.ExploreScreen.route, RouteScreen.DownloadScreen.route,
+                        RouteScreen.ProfileScreen.route)
+
                     Scaffold(bottomBar = {
-                        BottomNavigation{
-                            when(it) {
-                                0 -> navController.navigate(RouteScreen.HomeScreen.route)
-                                1 -> navController.navigate(RouteScreen.ExploreScreen.route)
-                                2 -> navController.navigate(RouteScreen.DownloadScreen.route)
-                                3 -> navController.navigate(RouteScreen.ProfileScreen.route)
+                        AnimatedVisibility(  isNavigationShow) {
+                            BottomNavigation{
+                                when(it) {
+                                    0 -> navController.navigate(RouteScreen.HomeScreen.route)
+                                    1 -> navController.navigate(RouteScreen.ExploreScreen.route)
+                                    2 -> navController.navigate(RouteScreen.DownloadScreen.route)
+                                    3 -> navController.navigate(RouteScreen.ProfileScreen.route)
+                                }
                             }
                         }
                     }) {
-                        Box (modifier = Modifier.padding(it)
+
+                        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+                            isNavigationShow = destination.route in listNavRoute
+
+                        }
+
+                        Box (modifier = Modifier
+                            .padding(it)
                             .fillMaxSize()
                             .background(BackgroundBlue)){
                             NavHost(
@@ -80,7 +98,9 @@ class MainActivity : ComponentActivity() {
                                     OnBoardingScreen(navController)
                                 }
                                 composable(RouteScreen.HomeScreen.route){
-                                    HomeScreen()
+                                    HomeScreen(){
+                                        navController.navigate(RouteScreen.DetailScreen.route)
+                                    }
                                 }
                                 composable(RouteScreen.ExploreScreen.route){
                                     ExploreScreen()
@@ -90,6 +110,9 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(RouteScreen.ProfileScreen.route){
                                     ProfileScreen()
+                                }
+                                composable(RouteScreen.DetailScreen.route){
+                                    DetailScreen()
                                 }
                             }
                         }
@@ -125,7 +148,8 @@ fun BottomNavigation(onClickItemNavigation : (Int) -> Unit) {
         verticalAlignment = Alignment.CenterVertically){
 
         itemsNavigation.forEachIndexed { index, item ->
-            Column(modifier = Modifier.weight(1f)
+            Column(modifier = Modifier
+                .weight(1f)
                 .clickable {
                     indexSelected = index
                     onClickItemNavigation(indexSelected)
