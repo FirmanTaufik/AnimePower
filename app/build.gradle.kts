@@ -68,4 +68,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation ("androidx.navigation:navigation-compose:2.7.6")
+    implementation ("org.jsoup:jsoup:1.14.3")
+
 }
