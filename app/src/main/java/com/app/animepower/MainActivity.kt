@@ -29,10 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -43,6 +40,7 @@ import com.app.animepower.screen.ExploreScreen
 import com.app.animepower.screen.HomeScreen
 import com.app.animepower.screen.OnBoardingScreen
 import com.app.animepower.screen.ProfileScreen
+import com.app.animepower.screen.SearchScreen
 import com.app.animepower.screen.SplashScreen
 import com.app.animepower.ui.theme.AnimePowerTheme
 import com.app.animepower.ui.theme.BackgroundBlue
@@ -98,7 +96,7 @@ class MainActivity : ComponentActivity() {
                                     OnBoardingScreen(navController)
                                 }
                                 composable(RouteScreen.HomeScreen.route){
-                                    HomeScreen(){
+                                    HomeScreen(navController){
                                         navController.navigate(RouteScreen.DetailScreen.route)
                                     }
                                 }
@@ -112,7 +110,10 @@ class MainActivity : ComponentActivity() {
                                     ProfileScreen()
                                 }
                                 composable(RouteScreen.DetailScreen.route){
-                                    DetailScreen()
+                                    DetailScreen(navController)
+                                }
+                                composable(RouteScreen.SearchScreen.route){
+                                    SearchScreen(navHostController = navController)
                                 }
                             }
                         }

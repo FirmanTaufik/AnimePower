@@ -72,5 +72,6 @@ dependencies {
     implementation(libs.paging.compose)
     implementation ("androidx.navigation:navigation-compose:2.7.6")
     implementation("com.github.a914-gowtham:compose-ratingbar:1.3.12")
+    implementation ("androidx.compose.foundation:foundation:1.4.3")
 
 }

@@ -1,9 +1,6 @@
 package com.app.animepower.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,30 +28,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RadialGradientShader
-import androidx.compose.ui.graphics.Shader
-import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.app.animepower.R
-import com.app.animepower.component.ItemTrending
 import com.app.animepower.ui.theme.BackgroundBlue
 import com.app.animepower.ui.theme.UnSelectedNavColor
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 
 @Composable
-fun DetailScreen() {
+fun DetailScreen(navController: NavHostController) {
     val state = rememberScrollState()
     Column(
         modifier = Modifier
@@ -94,7 +84,9 @@ fun DetailScreen() {
                     .padding(horizontal = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_arrow_left_circle),
                         contentDescription = null,
@@ -207,7 +199,8 @@ fun DetailScreen() {
                                     .background(
                                         brush = Brush.verticalGradient(
                                             listOf(Color.Transparent, Color.Black)
-                                        )  )
+                                        )
+                                    )
                                     .padding(8.dp)
                                     .fillMaxWidth()
                                     .align(Alignment.BottomStart)
@@ -224,5 +217,14 @@ fun DetailScreen() {
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(15.dp))
+        Text(
+            text = "Plot", fontWeight = FontWeight.Bold, fontSize = 18.sp,
+            modifier = Modifier.padding(start = 15.dp)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(text = "Eight thieves take hostages and lock themselves in the Royal Mint of Spain as a criminal mastermind manipulates the police to carry out his plan.",
+            modifier = Modifier.padding(horizontal = 15.dp))
     }
 }
