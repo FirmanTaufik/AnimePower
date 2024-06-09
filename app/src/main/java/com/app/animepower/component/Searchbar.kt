@@ -52,7 +52,7 @@ fun SearchBar(
     elevation: Dp =3.dp,
     cornerShape: Shape = RoundedCornerShape(16.dp),
     backgroundColor: Color = BackgroundCardColor,
-    onSearchClicked: () -> Unit = {},
+    onSearchClicked: (String) -> Unit = {},
     onTextChange: (String) -> Unit = {},
 ) {
     var text by remember { mutableStateOf(TextFieldValue()) }
@@ -63,7 +63,7 @@ fun SearchBar(
             .fillMaxWidth()
             .shadow(elevation = elevation, shape = cornerShape)
             .background(color = backgroundColor, shape = cornerShape)
-            .clickable { onSearchClicked() },
+            .clickable { onSearchClicked(text.text) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BasicTextField(
@@ -97,7 +97,7 @@ fun SearchBar(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Search
             ),
-            keyboardActions = KeyboardActions(onSearch = { onSearchClicked() }),
+            keyboardActions = KeyboardActions(onSearch = { onSearchClicked(text.text) }),
             singleLine = true
         )
         Box(

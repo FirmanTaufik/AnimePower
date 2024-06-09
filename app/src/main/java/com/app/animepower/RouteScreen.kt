@@ -6,6 +6,7 @@ sealed class RouteScreen(var title :String, var route :String, var iconDrawable 
     object DetailScreen:RouteScreen("DetailScreen", "DetailScreen", 0)
 
     object SearchScreen:RouteScreen("SearchScreen", "SearchScreen", 0)
+    object ListAnimeScreen:RouteScreen("ListAnimeScreen", "ListAnimeScreen", 0)
 
     object HomeScreen:RouteScreen("HomeScreen", "HomeScreen", 0)
     object ExploreScreen:RouteScreen("ExploreScreen", "exploreScreen", 0)

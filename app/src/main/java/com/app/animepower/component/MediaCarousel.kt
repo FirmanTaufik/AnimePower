@@ -1,7 +1,6 @@
 package com.app.animepower.component
 
 import android.util.Log
-import android.widget.RatingBar
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -20,14 +19,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,6 +49,7 @@ import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import com.app.animepower.R
 import com.app.animepower.model.HomeMediaUI
+import com.app.animepower.screen.home.HomeModel
 import com.app.animepower.ui.theme.SelectedNavColor
 import com.app.animepower.ui.theme.UnSelectedNavColor
 import com.app.animepower.ui.theme.flix_color_translucent_black
@@ -69,11 +67,11 @@ import kotlinx.coroutines.launch
 )
 @Composable
 fun MediaCarousel(
-    list: List<HomeMediaUI>,
+    list: ArrayList<HomeModel.PopularUpdate>,
     totalItemsToShow: Int = 10,
     carouselLabel: String = "",
     autoScrollDuration: Long = Constants.CAROUSEL_AUTO_SCROLL_TIMER,
-    onItemClicked: (HomeMediaUI) -> Unit
+    onItemClicked: (HomeModel.PopularUpdate) -> Unit
 ) {
 
     var currentPage by remember { mutableStateOf(0) }
@@ -119,7 +117,7 @@ fun MediaCarousel(
                 ),
                 pageSpacing = dimensionResource(id = R.dimen.normal_padding)
             ) { page: Int ->
-                val item: HomeMediaUI? = list[page]
+                val item  = list[page]
                 item?.let {
                     Card(
                         shape = RoundedCornerShape(20.dp),
@@ -165,10 +163,10 @@ fun MediaCarousel(
 }
 
 @Composable
-fun CarouselBox(item: HomeMediaUI) {
+fun CarouselBox(item: HomeModel.PopularUpdate) {
     Box {
         AsyncImage(
-            model = item.posterPath,
+            model = item.image,
             contentDescription = null,
             placeholder = painterResource(id = R.drawable.ic_load_placeholder),
             error = painterResource(id = R.drawable.ic_load_error),
@@ -199,7 +197,7 @@ fun CarouselBox(item: HomeMediaUI) {
                 .align(Alignment.BottomCenter)
         ) {
             Text(
-                text = item.name,
+                text = item.title,
                 color = Color.White,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -208,9 +206,9 @@ fun CarouselBox(item: HomeMediaUI) {
             )
             Spacer(modifier = Modifier.height(5.dp))
             Text(
-                text = "Action, Adventure | 2018",
+                text = item.genre,
                 color = Color.White,
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 fontSize = 13.sp,
                 modifier = Modifier
@@ -227,7 +225,7 @@ fun CarouselBox(item: HomeMediaUI) {
                     .padding(start = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                RatingBar(
+                /*RatingBar(
                     value = rating,
                     style = RatingBarStyle.Fill(activeColor = Color.Yellow, inActiveColor = UnSelectedNavColor),
                     onValueChange = {
@@ -239,9 +237,9 @@ fun CarouselBox(item: HomeMediaUI) {
                     size = 13.dp,
                     spaceBetween = 2.dp
                 )
-                Spacer(modifier = Modifier.width(5.dp))
+                Spacer(modifier = Modifier.width(5.dp))*/
                 Text(
-                    text = "6.7",
+                    text = item.episode,
                     color = Color.White,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,

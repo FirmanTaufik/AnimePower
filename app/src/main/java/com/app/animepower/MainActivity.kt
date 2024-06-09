@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -37,20 +39,28 @@ import com.app.animepower.model.ItemBottomNavigationModel
 import com.app.animepower.screen.DetailScreen
 import com.app.animepower.screen.DownloadScreen
 import com.app.animepower.screen.ExploreScreen
-import com.app.animepower.screen.HomeScreen
+import com.app.animepower.screen.home.HomeScreen
 import com.app.animepower.screen.OnBoardingScreen
 import com.app.animepower.screen.ProfileScreen
-import com.app.animepower.screen.SearchScreen
+import com.app.animepower.screen.search.SearchScreen
 import com.app.animepower.screen.SplashScreen
+import com.app.animepower.screen.home.HomeViewModel
+import com.app.animepower.screen.search.ListAnimeScreen
+import com.app.animepower.screen.search.SearchViewModel
+import com.app.animepower.sealed.State
 import com.app.animepower.ui.theme.AnimePowerTheme
 import com.app.animepower.ui.theme.BackgroundBlue
 import com.app.animepower.ui.theme.SelectedNavColor
 import com.app.animepower.ui.theme.UnSelectedNavColor
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val homeViewModel :HomeViewModel = hiltViewModel()
+            val searchViewModel :SearchViewModel = hiltViewModel()
             val navController = rememberNavController()
             var isNavigationShow by remember { mutableStateOf(true) }
             AnimePowerTheme {
@@ -96,7 +106,12 @@ class MainActivity : ComponentActivity() {
                                     OnBoardingScreen(navController)
                                 }
                                 composable(RouteScreen.HomeScreen.route){
-                                    HomeScreen(navController){
+                                    LaunchedEffect(key1 = true) {
+                                        if (homeViewModel.uiState.value !is State.OnSuccess<*> ) {
+                                            homeViewModel.getHome()
+                                        }
+                                    }
+                                    HomeScreen(navController,homeViewModel){
                                         navController.navigate(RouteScreen.DetailScreen.route)
                                     }
                                 }
@@ -113,7 +128,10 @@ class MainActivity : ComponentActivity() {
                                     DetailScreen(navController)
                                 }
                                 composable(RouteScreen.SearchScreen.route){
-                                    SearchScreen(navHostController = navController)
+                                    SearchScreen(navHostController = navController, searchViewModel)
+                                }
+                                composable(RouteScreen.ListAnimeScreen.route){
+                                    ListAnimeScreen(  navController, searchViewModel)
                                 }
                             }
                         }
